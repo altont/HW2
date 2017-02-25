@@ -19,7 +19,6 @@ class agent {
 public:
 	int ax;
 	int ay;
-	string position = "A";
 	int agent_position[2] = { ax, ay };
 	void init();
 	void up(agent* learner);
@@ -37,20 +36,20 @@ void agent::init() {
 } 
 
 void agent::up(agent* plearner) {
-	ay = plearner->agent_position[1] + 1;   											 // agent's y position is moved up 1
+	ay = plearner->ay + 1;   											 // agent's y position is moved up 1
 };
 
 void agent::down(agent* plearner) {
-	ay = plearner->agent_position[1] - 1;   											 // agent's y position is moved down 1
+	ay = plearner->ay - 1;   											 // agent's y position is moved down 1
 }
 
 
 void agent::right(agent* plearner) {
-	ax = plearner->agent_position[0] + 1;   											 // agent's x position is moved right 1
+	ax = plearner->ax + 1;   											 // agent's x position is moved right 1
 }
 
 void agent::left(agent* plearner) {
-	ax = plearner->agent_position[0] - 1;   											 // agent's x position is moved left 1
+	ax = plearner->ax - 1;   											 // agent's x position is moved left 1
 }
 
 /////////////////////////////////////////////////
@@ -63,6 +62,7 @@ public:
 	int y;
 	void init();
 	void show();
+	void position(domain* pgrid, agent* plearner);
 	vector<vector<int>> matrix;
 };
 
@@ -93,6 +93,15 @@ void domain::show() {
 		}
 		cout << endl;
 	}
+	cout << "\n" << endl;
+}
+
+void domain::position(domain* pgrid, agent* plearner) {
+	int a = plearner->ax;
+	int b = plearner->ay;
+	int AP = 9;
+	string position = "A";
+	pgrid->matrix[a][b] = AP;
 }
 
 
@@ -150,9 +159,20 @@ int main()
 	srand(time(NULL));
 	agent learner;
 	learner.init();
+	agent* plearner = &learner;
 	domain grid;
 	grid.init();
 	domain* pgrid = &grid;
+	grid.position(pgrid, plearner);
+	cout << plearner->ay << endl;
+	grid.show();
+	plearner->down(plearner);
+	cout << plearner->ay << plearner->ax << endl;
+	grid.position(pgrid, plearner);
+	grid.show();
+	plearner->right(plearner);
+	grid.position(pgrid, plearner);
+	cout << plearner->ay << plearner->ax << endl;
 	grid.show();
 	// if statement to check if the goal's coordinates match the agent's coordinates
 	// if (agent x position != goal x position && agent y position != goal)
