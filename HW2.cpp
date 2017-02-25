@@ -3,106 +3,163 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <vector>
 #include <time.h>
 #include <random>
-#include <fstream>
 #include <array>
-#include <vector>
+#include <string.h>
 
 using namespace std;
 
 /////////////////////////////////////////////////
-//////////////// GRID STUFF /////////////////////
+/////////////// AGENT STUFF /////////////////////
 /////////////////////////////////////////////////
-
-class domain {																															// Creates the Gridworld and goal coordinates
-public:
-	void init();
-
-};
-
-void domain::init() {
-	int x;																																// Horizontal dimension for GRID
-	int y;																																// Vertical dimension for GRID
-	
-}
-
-////////////////////////////////////////////////
-////////////////// AGENT STUFF /////////////////
-////////////////////////////////////////////////
 
 class agent {
 public:
-	int ax;																																// Agent's x coordinate
-	int ay;																																// Agent's y coordinate
-	int last_ax;																														// Former x coordinate
-	int last_ay;																														// Former y coordinate
-	void init();																														// Initialize starting coordinates
-	void up();																															// Move agent up one cell
-	void down();																														// Move agent down one cell
-	void right();																														// Move agent right one cell
-	void left();																														// Move agent left one cell
+	int ax;
+	int ay;
+	string position = "A";
+	int agent_position[2] = { ax, ay };
+	void init();
+	void up(agent* learner);
+	void down(agent* learner);
+	void right(agent* learner);
+	void left(agent* learner);
 };
 
 void agent::init() {
+	ax = 1;
+	ay = 1;
+	agent_position[0] = ax;
+	agent_position[1] = ay;
 
+} 
+
+void agent::up(agent* plearner) {
+	ay = plearner->agent_position[1] + 1;   											 // agent's y position is moved up 1
+};
+
+void agent::down(agent* plearner) {
+	ay = plearner->agent_position[1] - 1;   											 // agent's y position is moved down 1
 }
 
 
-void agent::up() {																														// ay + 1
+void agent::right(agent* plearner) {
+	ax = plearner->agent_position[0] + 1;   											 // agent's x position is moved right 1
+}
+
+void agent::left(agent* plearner) {
+	ax = plearner->agent_position[0] - 1;   											 // agent's x position is moved left 1
+}
+
+/////////////////////////////////////////////////
+///////////////// DOMAIN STUFF //////////////////
+/////////////////////////////////////////////////
+
+class domain {
+public:
+	int x;
+	int y;
+	void init();
+	void show();
+	vector<vector<int>> matrix;
+};
+
+void domain::init() {
+	cout << "Please choose how many rows \n x = " << endl;
+	cin >> x;
+	cout << "Please choose how many columns \n y = " << endl;
+	cin >> y;
+	matrix.resize(x);
+	for (int i = 0; i < x; i++) {
+		matrix[i].resize(y);
+	}
+	for (int t = 0; t < x; t++) {
+		for (int j = 0; j < y; j++) {
+			matrix[t][j] = 1;
+			cout << endl;
+		}
+	}
 
 }
 
-void agent::down() {																													// ay - 1
+// obtained from http://stackoverflow.com/questions/1403150/how-do-you-dynamically-allocate-a-matrix
+
+void domain::show() {
+	for (int o = 0; o < x; o++) {
+		for (int p = 0; p < y; p++) {
+			cout << matrix[o][p] << " ";																									// show matrix
+		}
+		cout << endl;
+	}
+}
+
+
+
+/////////////////////////////////////////////////
+///////////////// BUMP THINGS ///////////////////
+/////////////////////////////////////////////////
+
+
+
+void bumper() {
+	// use an if statement to see if the agent's xy coordinate is greater than the x/ymax of the domain
+	// for extreme cases, find the difference between the agent's coordinates and max coordinates of the domain
+}
+
+
+
+/////////////////////////////////////////////////
+///////// MOVING AGENT BACK TO BOARD FROM ///////
+///////// EXTREEEEEEEEEEEME COORDINATES /////////
+/////////////////////////////////////////////////
+
+void testA(agent* plearner, domain* ax, domain* ay) {
+	// set the agent's x and y coordinates to a large value
+	// use the bumper max function
+	plearner->ax = 10000;
+	plearner->ax = 10000;
+
 
 }
 
-void agent::right() {																													// ax + 1
+/////////////////////////////////////////////////
+//////// HUMAN CONTROLLED NAVIGATION ////////////
+/////////////////////////////////////////////////
 
+void testB() {
+	// lots of cin ?????
 }
 
-void agent::left() {																													// ax - 1
 
+
+/////////////////////////////////////////////////
+///////////// HARD CODED NAVIGATION /////////////
+/////////////////////////////////////////////////
+
+void testC() {
+	// if agent x > goal x, agent x - 1
+	// if agent y > goal y, agent y - 1
+	// if agent x < goal x, agent x + 1
+	// if agent y < goal y, agent y + 1
 }
-
-////////////////////////////////////////////////
-///////////////// BUMP FUNCTIONS ///////////////
-////////////////////////////////////////////////
-
-void bump() {																															// To be used if the learner moves off the Gridworld
-
-}
-
-void bump_extreme() {																													// To be used if the learner's initial coordinates are off the charts
-
-}
-
-///////////////////////////////////////////////
-//////////////// TEST FUNCTIONS ///////////////
-///////////////////////////////////////////////
-
-void testA() {																															// Relocation of agent when extreme initial coordinates are used
-	// check the difference of ax,ay and the max_x, max_y
-	// designate ax,ay - difference x,y
-	// use bump_extreme??
-
-}
-
-void testB() {																															// Human navigation
-
-}
-
-void testC() {																															// Heuristic navigation
-
-}
-
-///////////////////////////////////////////////
 
 int main()
 {
 	srand(time(NULL));
-
-
-    return 0;
+	agent learner;
+	learner.init();
+	domain grid;
+	grid.init();
+	domain* pgrid = &grid;
+	grid.show();
+	// if statement to check if the goal's coordinates match the agent's coordinates
+	// if (agent x position != goal x position && agent y position != goal)
+	//    cout << agent position << endl;
+	//    cout << goal position << endl;
+	//  cout << Press W, A, S, or D for Up, Left, Down, or Right movement
+	//    input = cin >>
+	//   	 if
+	return 0;
 }
-
