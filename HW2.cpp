@@ -8,6 +8,8 @@
 #include <random>
 #include <array>
 #include <string.h>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -68,14 +70,17 @@ public:
 	void write();
 	void show(agent* plearner);
 	void position(domain* pgrid, agent* plearner);
+	void goal(domain* pgrid);
+	int goal_x;
+	int goal_y;
 	vector<vector<int>> matrix;
 };
 
 void domain::init() {
 	cout << "Please choose how many rows \n x = " << endl;
-	cin >> x;
+	cin >> x;																																// user input for rows
 	cout << "Please choose how many columns \n y = " << endl;
-	cin >> y;
+	cin >> y;																																// user input for columns
 	matrix.resize(x);
 	for (int i = 0; i < x; i++) {
 		matrix[i].resize(y);
@@ -94,7 +99,7 @@ void domain::init() {
 void domain::write() {
 	for (int t = 0; t < x; t++) {
 		for (int j = 0; j < y; j++) {
-			matrix[t][j] = 1;
+			matrix[t][j] = 1;																												// populates board with 1's
 		}
 	}
 	cout << endl;
@@ -107,7 +112,8 @@ void domain::show(agent* plearner) {
 		}
 		cout << endl;
 	}
-	cout << "Your x coordinate is " << plearner->ax+1 << " and your Y coordinate is " << plearner->ay+1 << "\n" << endl;
+	cout << "Your X coordinate is " << plearner->ax+1 << " and your Y coordinate is " << plearner->ay+1 << ".\n" << endl;					// display coordinates
+	cout << "The goal's coordinates are at " << y << "," << x << ".\n" << endl;
 }
 
 void domain::position(domain* pgrid, agent* plearner) {
@@ -116,6 +122,13 @@ void domain::position(domain* pgrid, agent* plearner) {
 	int AP = 9;
 	string position = "A";
 	pgrid->matrix[a][b] = AP;
+}
+
+void domain::goal(domain* pgrid) {
+	int goal_x = x - 1;
+	int goal_y = y - 1;
+	int goal = 5;
+	pgrid->matrix[goal_x][goal_y] = goal;
 }
 
 
@@ -143,8 +156,6 @@ void testA(agent* plearner, domain* ax, domain* ay) {
 	// use the bumper max function
 	plearner->ax = 10000;
 	plearner->ay = 10000;
-
-
 }
 
 /////////////////////////////////////////////////
@@ -171,7 +182,7 @@ void testC() {
 int main()
 {
 	srand(time(NULL));
-	cout << "Coordinates start from 1,1 at top left corner. " << endl;
+	cout << "Coordinates start from 1,1 at top left corner. \nThe AGENT is represented by a 9. \nThe GOAL is represented by a 5. \nAn empty space is represented by a 1." << endl;
 	agent learner;
 	learner.init();
 	agent* plearner = &learner;
@@ -179,31 +190,70 @@ int main()
 	grid.init();
 	domain* pgrid = &grid;
 	//
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
-	plearner->up(plearner);
-	grid.write();
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
-	plearner->right(plearner);
-	grid.write();
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
-	plearner->down(plearner);
-	grid.write();
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
-	plearner->left(plearner);
-	grid.write();
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
+	grid.goal(pgrid);																																			// establishes goal
+	grid.position(pgrid, plearner);																																// positions the learner
+	grid.show(plearner);																																		// visual display of the grid
+	////
+	//plearner->up(plearner);
+	//grid.write();
+	//grid.goal(pgrid);
+	//grid.position(pgrid, plearner);
+	//grid.show(plearner);
+	////
+	//plearner->right(plearner);
+	//grid.write();
+	//grid.goal(pgrid);
+	//grid.position(pgrid, plearner);
+	//grid.show(plearner);
+	////
+	//plearner->down(plearner);
+	//grid.write();
+	//grid.goal(pgrid);
+	//grid.position(pgrid, plearner);
+	//grid.show(plearner);
+	////
+	//plearner->left(plearner);
+	//grid.write();
+	//grid.goal(pgrid);
+	//grid.position(pgrid, plearner);
+	//grid.show(plearner);
+	////
+	
+	while (plearner->ax != pgrid->goal_x && plearner->ay != pgrid->goal_y) {
+		int user_input;
+		cout << "Move around the agent (9). 1 to move up, 2 to move down, 3 to move right, 4 to move left!" << endl;
+		cin >> user_input;
+		if (user_input == 1) {
+			plearner->up(plearner);
+			grid.write();
+			grid.goal(pgrid);
+			grid.position(pgrid, plearner);
+			grid.show(plearner);
+		}
+		if (user_input == 2) {
+			plearner->down(plearner);
+			grid.write();
+			grid.goal(pgrid);
+			grid.position(pgrid, plearner);
+			grid.show(plearner);
+		}
+		if (user_input == 3) {
+			plearner->right(plearner);
+			grid.write();
+			grid.goal(pgrid);
+			grid.position(pgrid, plearner);
+			grid.show(plearner);
+		}
+		if (user_input == 4) {
+			plearner->left(plearner);
+			grid.write();
+			grid.goal(pgrid);
+			grid.position(pgrid, plearner);
+			grid.show(plearner);
+		}
+	}
 
-	// if statement to check if the goal's coordinates match the agent's coordinates
+	// while statement to check if the goal's coordinates match the agent's coordinates
 	// if (agent x position != goal x position && agent y position != goal)
 	//    cout << agent position << endl;
 	//    cout << goal position << endl;
