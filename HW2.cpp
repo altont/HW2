@@ -65,6 +65,7 @@ public:
 	int x;
 	int y;
 	void init();
+	void write();
 	void show(agent* plearner);
 	void position(domain* pgrid, agent* plearner);
 	vector<vector<int>> matrix;
@@ -82,13 +83,22 @@ void domain::init() {
 	for (int t = 0; t < x; t++) {
 		for (int j = 0; j < y; j++) {
 			matrix[t][j] = 1;
-			cout << endl;
 		}
 	}
+	cout << endl;
 
 }
 
 // obtained from http://stackoverflow.com/questions/1403150/how-do-you-dynamically-allocate-a-matrix
+
+void domain::write() {
+	for (int t = 0; t < x; t++) {
+		for (int j = 0; j < y; j++) {
+			matrix[t][j] = 1;
+		}
+	}
+	cout << endl;
+}
 
 void domain::show(agent* plearner) {
 	for (int o = 0; o < x; o++) {
@@ -132,7 +142,7 @@ void testA(agent* plearner, domain* ax, domain* ay) {
 	// set the agent's x and y coordinates to a large value
 	// use the bumper max function
 	plearner->ax = 10000;
-	plearner->ax = 10000;
+	plearner->ay = 10000;
 
 
 }
@@ -161,7 +171,7 @@ void testC() {
 int main()
 {
 	srand(time(NULL));
-	cout << "Coordinates start from 0,0. " << endl;
+	cout << "Coordinates start from 1,1 at top left corner. " << endl;
 	agent learner;
 	learner.init();
 	agent* plearner = &learner;
@@ -172,19 +182,23 @@ int main()
 	grid.position(pgrid, plearner);
 	grid.show(plearner);
 	//
-	plearner->down(plearner);
+	plearner->up(plearner);
+	grid.write();
 	grid.position(pgrid, plearner);
 	grid.show(plearner);
 	//
 	plearner->right(plearner);
-	grid.position(pgrid, plearner);
-	grid.show(plearner);
-	//
-	plearner->right(plearner);
+	grid.write();
 	grid.position(pgrid, plearner);
 	grid.show(plearner);
 	//
 	plearner->down(plearner);
+	grid.write();
+	grid.position(pgrid, plearner);
+	grid.show(plearner);
+	//
+	plearner->left(plearner);
+	grid.write();
 	grid.position(pgrid, plearner);
 	grid.show(plearner);
 	//
