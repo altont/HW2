@@ -19,7 +19,7 @@ class agent {
 public:
 	int ax;
 	int ay;
-	int agent_position[2] = { ax, ay };
+	int agent_position[2] = { ay, ax };
 	void init();
 	void up(agent* learner);
 	void down(agent* learner);
@@ -30,26 +30,30 @@ public:
 void agent::init() {
 	ax = 1;
 	ay = 1;
-	agent_position[0] = ax;
-	agent_position[1] = ay;
+	agent_position[1] = ax;
+	agent_position[0] = ay;
 
 } 
 
 void agent::up(agent* plearner) {
-	ay = plearner->ay + 1;   											 // agent's y position is moved up 1
+	ay = plearner->ay - 1;   											 // agent's y position is moved up 1
+	agent_position[0] = ay;
 };
 
 void agent::down(agent* plearner) {
-	ay = plearner->ay - 1;   											 // agent's y position is moved down 1
+	ay = plearner->ay + 1;   											 // agent's y position is moved down 1
+	agent_position[0] = ay;
 }
 
 
 void agent::right(agent* plearner) {
 	ax = plearner->ax + 1;   											 // agent's x position is moved right 1
+	agent_position[1] = ax;
 }
 
 void agent::left(agent* plearner) {
 	ax = plearner->ax - 1;   											 // agent's x position is moved left 1
+	agent_position[1] = ax;
 }
 
 /////////////////////////////////////////////////
@@ -61,7 +65,7 @@ public:
 	int x;
 	int y;
 	void init();
-	void show();
+	void show(agent* plearner);
 	void position(domain* pgrid, agent* plearner);
 	vector<vector<int>> matrix;
 };
@@ -86,19 +90,19 @@ void domain::init() {
 
 // obtained from http://stackoverflow.com/questions/1403150/how-do-you-dynamically-allocate-a-matrix
 
-void domain::show() {
+void domain::show(agent* plearner) {
 	for (int o = 0; o < x; o++) {
 		for (int p = 0; p < y; p++) {
 			cout << matrix[o][p] << " ";																									// show matrix
 		}
 		cout << endl;
 	}
-	cout << "\n" << endl;
+	cout << "Your x coordinate is " << plearner->ax+1 << " and your Y coordinate is " << plearner->ay+1 << "\n" << endl;
 }
 
 void domain::position(domain* pgrid, agent* plearner) {
-	int a = plearner->ax;
-	int b = plearner->ay;
+	int a = plearner->agent_position[0];
+	int b = plearner->agent_position[1];
 	int AP = 9;
 	string position = "A";
 	pgrid->matrix[a][b] = AP;
@@ -157,23 +161,34 @@ void testC() {
 int main()
 {
 	srand(time(NULL));
+	cout << "Coordinates start from 0,0. " << endl;
 	agent learner;
 	learner.init();
 	agent* plearner = &learner;
 	domain grid;
 	grid.init();
 	domain* pgrid = &grid;
+	//
 	grid.position(pgrid, plearner);
-	cout << plearner->ay << endl;
-	grid.show();
+	grid.show(plearner);
+	//
 	plearner->down(plearner);
-	cout << plearner->ay << plearner->ax << endl;
 	grid.position(pgrid, plearner);
-	grid.show();
+	grid.show(plearner);
+	//
 	plearner->right(plearner);
 	grid.position(pgrid, plearner);
-	cout << plearner->ay << plearner->ax << endl;
-	grid.show();
+	grid.show(plearner);
+	//
+	plearner->right(plearner);
+	grid.position(pgrid, plearner);
+	grid.show(plearner);
+	//
+	plearner->down(plearner);
+	grid.position(pgrid, plearner);
+	grid.show(plearner);
+	//
+
 	// if statement to check if the goal's coordinates match the agent's coordinates
 	// if (agent x position != goal x position && agent y position != goal)
 	//    cout << agent position << endl;
