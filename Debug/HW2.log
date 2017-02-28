@@ -1,4 +1,4 @@
 ﻿  HW2.cpp
-c:\users\alton\documents\me 493\hw2\hw2\hw2.cpp(322): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\alton\documents\me 493\hw2\hw2\hw2.cpp(411): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   HW2.vcxproj -> C:\Users\Alton\Documents\ME 493\HW2\Debug\HW2.exe
   HW2.vcxproj -> C:\Users\Alton\Documents\ME 493\HW2\Debug\HW2.pdb (Full PDB)
